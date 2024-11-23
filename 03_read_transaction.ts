@@ -11,32 +11,31 @@ import {
 
 dotenv.config();
 
-const main = async () => {
-  const keypair = process.env.KEYPAIR;
-  if (!keypair) {
-    console.log("Please provide a keypair");
-    console.log("❌ Failed!");
-    process.exit();
-  }
+const keypair = process.env.KEYPAIR;
+if (!keypair) {
+  console.error("Please provide a keypair");
+  process.exit(1);
+}
 
-  const connection = new Connection(clusterApiUrl("devnet"));
-  const senderAddress = getKeypairFromEnvironment("KEYPAIR");
-  const receiverAddress = getKeypairFromEnvironment("RECEIVER").publicKey;
+const connection = new Connection(clusterApiUrl("devnet"));
+const senderAddress = getKeypairFromEnvironment("KEYPAIR");
+const receiverAddress = getKeypairFromEnvironment("RECEIVER").publicKey;
 
-  const amount = 1.5 * LAMPORTS_PER_SOL;
+const amount = 1.5;
 
-  const transaction = new Transaction();
-  const transferInstruction = SystemProgram.transfer({
-    fromPubkey: senderAddress.publicKey,
-    toPubkey: receiverAddress,
-    lamports: amount,
-  });
+const transaction = new Transaction();
+const transferInstruction = SystemProgram.transfer({
+  fromPubkey: senderAddress.publicKey,
+  toPubkey: receiverAddress,
+  lamports: amount * LAMPORTS_PER_SOL,
+});
 
-  transaction.add(transferInstruction);
+transaction.add(transferInstruction);
+
+try {
   const signature = await sendAndConfirmTransaction(connection, transaction, [senderAddress]);
-
-  console.log(`Tx successful, ${amount} SOL sent to ${receiverAddress}`);
-  console.log(`Transaction signature is ${signature} ✅ Done!`);
-};
-
-main().catch(console.error);
+  console.log(`Transaction successful! ${amount} SOL sent to ${receiverAddress}`);
+  console.log(`Transaction signature: ${signature}`);
+} catch (error) {
+  console.error("Transaction failed:", error);
+}

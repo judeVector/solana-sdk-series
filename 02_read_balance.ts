@@ -1,6 +1,9 @@
-require("dotenv").config();
+import dotenv from "dotenv";
+
 import { getKeypairFromEnvironment } from "@solana-developers/helpers";
 import { clusterApiUrl, Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
+
+dotenv.config();
 
 const keypair = process.env.KEYPAIR;
 if (!keypair) {
