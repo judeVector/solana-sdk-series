@@ -11,14 +11,14 @@ import {
 
 dotenv.config();
 
-const keypair = process.env.KEYPAIR;
+const keypair = process.env.SECRET_KEY;
 if (!keypair) {
   console.error("Please provide a keypair");
   process.exit(1);
 }
 
 const connection = new Connection(clusterApiUrl("devnet"));
-const senderAddress = getKeypairFromEnvironment("KEYPAIR");
+const senderAddress = getKeypairFromEnvironment("SECRET_KEY");
 const receiverAddress = getKeypairFromEnvironment("RECEIVER").publicKey;
 
 const amount = 1.5;
