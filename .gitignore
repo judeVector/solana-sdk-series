@@ -1,3 +1,7 @@
 .env
 node_modules
+<<<<<<< HEAD
 .qodo
+=======
+/target
+>>>>>>> e0791bae0a8765bad1cfef768e08e7619da3f830
